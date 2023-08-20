@@ -1,0 +1,23 @@
+name: Deploy to Nginx Server
+
+on:
+  push:
+    branches:
+      - main  # Change this to the branch you want to trigger the deployment on
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Deploy to Nginx
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.NGINX_HOST }}  # Add your Nginx server's IP/domain as a secret
+          username: ${{ secrets.NGINX_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}  # Add your SSH private key as a secret
+          source: "public/"  # Source directory containing HTML and static files
+          target: "/path/to/nginx/html/"  # Destination directory on Nginx server
